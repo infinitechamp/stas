@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pay Online | STAS Intelligent Systems</title>
+  <meta name="description" content="Pay STAS Intelligent Systems invoices and quotations securely online with M-Pesa, card or bank transfer.">
+  <meta name="theme-color" content="#0b1f5b">
+  <link rel="canonical" href="https://stas.co.ke/pay.html">
+  <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="site-header" id="top">
+    <div class="wrap header-inner">
+      <a class="brand" href="index.html" aria-label="STAS Intelligent Systems home">
+        <img src="assets/icon.png" alt="" width="38" height="38">
+        <span class="brand-text">
+          <span class="brand-name">STAS</span>
+          <span class="brand-sub">Intelligent Systems</span>
+        </span>
+      </a>
+
+      <button class="nav-toggle" aria-expanded="false" aria-controls="nav" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav id="nav" class="nav" aria-label="Main">
+        <a href="index.html#services">Services</a>
+        <a href="index.html#learning">Tutoring &amp; Research</a>
+        <a href="index.html#about">About</a>
+        <a href="pay.html" aria-current="page">Pay online</a>
+        <a href="index.html#contact" class="btn btn-gold btn-sm">Get in touch</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="pay-hero">
+      <div class="wrap">
+        <p class="eyebrow">Secure payments</p>
+        <h1>Pay <span class="gold-text">STAS</span> online</h1>
+        <p class="lead">Settle an invoice or quotation with M-Pesa, card or bank transfer. Have your invoice or quotation number ready.</p>
+      </div>
+    </section>
+
+    <section class="section pay-section">
+      <div class="wrap pay-grid">
+
+        <div>
+          <noscript><p class="notice">Please enable JavaScript to use the payment page, or contact us at stasinfinitysystems@gmail.com.</p></noscript>
+
+          <div id="setup-notice" class="notice" hidden>
+            <strong>Online payments are being set up.</strong>
+            Until then, please contact us at
+            <a href="mailto:stasinfinitysystems@gmail.com">stasinfinitysystems@gmail.com</a> and we will send you payment details.
+          </div>
+
+          <form id="pay-form" class="form" novalidate hidden>
+            <h2 class="form-title">Payment details</h2>
+
+            <div class="field">
+              <label for="p-name">Your name or company</label>
+              <input id="p-name" name="name" type="text" autocomplete="name" required>
+            </div>
+            <div class="field">
+              <label for="p-email">Email (for your receipt)</label>
+              <input id="p-email" name="email" type="email" autocomplete="email" required>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="p-ref">Invoice / quotation no.</label>
+                <input id="p-ref" name="ref" type="text" placeholder="e.g. INV-0012" required>
+              </div>
+              <div class="field">
+                <label for="p-amount">Amount (<span class="cur">KES</span>)</label>
+                <input id="p-amount" name="amount" type="number" inputmode="decimal" min="1" step="any" required>
+              </div>
+            </div>
+
+            <fieldset class="methods" id="methods">
+              <legend>How would you like to pay?</legend>
+              <!-- filled by js/pay.js from js/payments-config.js -->
+            </fieldset>
+
+            <button type="submit" class="btn btn-gold">Continue</button>
+            <p class="form-note" id="pay-note" role="status"></p>
+          </form>
+
+          <div id="pay-result" class="result" hidden aria-live="polite"></div>
+        </div>
+
+        <aside class="pay-aside">
+          <h3>Safe and simple</h3>
+          <ul class="checks">
+            <li>Card and M-Pesa payments are handled by our payment partner. We never see or store your card details.</li>
+            <li>Always use the invoice number as your payment reference so we can match it.</li>
+            <li>You will get a confirmation once we receive your payment.</li>
+          </ul>
+          <h3>Need help?</h3>
+          <p>Email <a href="mailto:stasinfinitysystems@gmail.com" data-site-href="mailto" data-site-text="email">stasinfinitysystems@gmail.com</a> or message us on WhatsApp.</p>
+          <p><a class="btn btn-ghost-dark btn-sm" href="index.html">&larr; Back to home</a></p>
+        </aside>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <div class="footer-brand">
+        <img src="assets/icon.png" alt="" width="34" height="34">
+        <div>
+          <strong>STAS Intelligent Systems</strong>
+          <span>Cloud &middot; Software &middot; Support &middot; Consulting</span>
+        </div>
+      </div>
+      <nav class="footer-nav" aria-label="Footer">
+        <a href="index.html#services">Services</a>
+        <a href="index.html#about">About</a>
+        <a href="pay.html">Pay online</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+      <p class="copy">&copy; <span id="year">2026</span> STAS Intelligent Systems. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/site-config.js"></script>
+  <script src="js/payments-config.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/pay.js"></script>
+</body>
+</html>
