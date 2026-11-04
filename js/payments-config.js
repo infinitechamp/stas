@@ -34,6 +34,13 @@ window.STAS_PAYMENTS = {
     branch: ""
   },
 
-  // 4) PayPal or other international link (optional)
-  paypalUrl: ""
+  // 4) PayPal (international clients). PayPal does not support Kenyan shillings, so these payments are in USD.
+  //    Option A (recommended): your PayPal.Me name. For paypal.me/stasinfinity put "stasinfinity".
+  //                            The amount the client enters is filled in automatically.
+  //    Option B: any PayPal payment link or button link (https://...), if PayPal.Me is not available for your account.
+  paypal: {
+    me: "",
+    link: "",
+    currency: "USD"
+  }
 };

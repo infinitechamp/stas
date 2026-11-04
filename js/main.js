@@ -149,8 +149,22 @@
         setNote('Thank you! Your message has been sent. We will reply as soon as we can.', 'ok');
       }).catch(function () {
         var contact = site.email || 'stasinfinitysystems@gmail.com';
-        setNote('Sorry, we could not send your message. Please try again, or write to ' + contact +
-          (waNumber ? ' or chat with us on WhatsApp.' : '.'), 'err');
+        note.className = 'form-note err';
+        note.textContent = 'Sorry, we could not send your message. Please try again, or ';
+        var m = document.createElement('a');
+        m.href = 'mailto:' + contact + '?subject=' + encodeURIComponent(subject) +
+          '&body=' + encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\n\n' + message);
+        m.textContent = 'email us';
+        note.appendChild(m);
+        if (waNumber) {
+          note.appendChild(document.createTextNode(' or '));
+          var w = document.createElement('a');
+          w.href = waLink('Hello STAS, my name is ' + name + '. ' + message);
+          w.target = '_blank'; w.rel = 'noopener';
+          w.textContent = 'message us on WhatsApp';
+          note.appendChild(w);
+        }
+        note.appendChild(document.createTextNode('.'));
       }).then(function () {
         btn.disabled = false; btn.textContent = label;
       });

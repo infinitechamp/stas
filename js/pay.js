@@ -8,10 +8,14 @@
   var setup = document.getElementById('setup-notice');
   var result = document.getElementById('pay-result');
   var note = document.getElementById('pay-note');
+  var hint = document.getElementById('amount-hint');
   if (!form) return;
 
-  var cur = cfg.currency || 'KES';
-  document.querySelectorAll('.cur').forEach(function (el) { el.textContent = cur; });
+  var baseCur = cfg.currency || 'KES';
+  var pp = cfg.paypal || {};
+  var ppCur = pp.currency || 'USD';
+  var ppMe = typeof pp.me === 'string' ? pp.me.trim().replace(/^.*paypal\.(?:me|com\/paypalme)\//i, '').replace(/\/.*$/, '') : '';
+  var ppLink = pp.link || cfg.paypalUrl || '';
 
   function isHttps(u) { return typeof u === 'string' && /^https:\/\//i.test(u); }
   function el(tag, cls, text) {
@@ -20,23 +24,23 @@
     if (text != null) e.textContent = text;
     return e;
   }
-  function money(n) {
-    return cur + ' ' + Number(n).toLocaleString('en-KE', { maximumFractionDigits: 2 });
+  function money(n, c) {
+    return (c || baseCur) + ' ' + Number(n).toLocaleString('en-KE', { maximumFractionDigits: 2 });
   }
 
   // Build the list of methods that are actually configured
   var methods = [];
   if (isHttps(cfg.checkoutUrl)) {
-    methods.push({ id: 'checkout', title: cfg.checkoutLabel || 'Pay with M-Pesa or card', desc: 'Secure online checkout. Recommended.' });
+    methods.push({ id: 'checkout', cur: baseCur, title: cfg.checkoutLabel || 'Pay with M-Pesa or card', desc: 'Secure online checkout. Recommended.' });
   }
   if (cfg.mpesa && cfg.mpesa.number && (cfg.mpesa.type === 'paybill' || cfg.mpesa.type === 'till')) {
-    methods.push({ id: 'mpesa', title: 'M-Pesa ' + (cfg.mpesa.type === 'paybill' ? 'Paybill' : 'Till'), desc: 'Pay from your phone menu.' });
+    methods.push({ id: 'mpesa', cur: baseCur, title: 'M-Pesa ' + (cfg.mpesa.type === 'paybill' ? 'Paybill' : 'Till'), desc: 'Pay from your phone menu.' });
   }
   if (cfg.bank && cfg.bank.accountNumber) {
-    methods.push({ id: 'bank', title: 'Bank transfer', desc: 'Pay from your bank or mobile banking.' });
+    methods.push({ id: 'bank', cur: baseCur, title: 'Bank transfer', desc: 'Pay from your bank or mobile banking.' });
   }
-  if (isHttps(cfg.paypalUrl)) {
-    methods.push({ id: 'paypal', title: 'PayPal / international', desc: 'For payments from outside Kenya.' });
+  if (/^[A-Za-z0-9._-]{3,}$/.test(ppMe) || isHttps(ppLink)) {
+    methods.push({ id: 'paypal', cur: ppCur, title: 'PayPal', desc: 'For international payments, charged in ' + ppCur + '.' });
   }
 
   if (!methods.length) {
@@ -44,6 +48,11 @@
     return;
   }
   form.hidden = false;
+
+  function methodById(id) {
+    for (var i = 0; i < methods.length; i++) if (methods[i].id === id) return methods[i];
+    return methods[0];
+  }
 
   methods.forEach(function (m, i) {
     var label = el('label', 'method');
@@ -56,6 +65,23 @@
     label.appendChild(input); label.appendChild(body);
     methodsBox.appendChild(label);
   });
+
+  // Keep the amount label in the currency of the chosen method (PayPal does not support KES)
+  function syncCurrency() {
+    var picked = form.querySelector('input[name="method"]:checked');
+    var m = methodById(picked ? picked.value : methods[0].id);
+    document.querySelectorAll('.cur').forEach(function (e) { e.textContent = m.cur; });
+    if (hint) {
+      if (m.cur !== baseCur) {
+        hint.textContent = 'This method is charged in ' + m.cur + '. Enter the ' + m.cur + ' amount shown on your invoice.';
+        hint.hidden = false;
+      } else {
+        hint.hidden = true;
+      }
+    }
+  }
+  methodsBox.addEventListener('change', syncCurrency);
+  syncCurrency();
 
   function copyRow(labelText, value) {
     var row = el('div', 'copy-row');
@@ -77,7 +103,7 @@
 
   function summary(d) {
     var box = el('div', 'summary');
-    [['Name', d.name], ['Reference', d.ref], ['Amount', money(d.amount)]].forEach(function (p) {
+    [['Name', d.name], ['Reference', d.ref], ['Amount', money(d.amount, d.cur)]].forEach(function (p) {
       var r = el('div', 'summary-row');
       r.appendChild(el('span', null, p[0]));
       r.appendChild(el('strong', null, p[1]));
@@ -90,7 +116,7 @@
     var wrap = el('div', 'confirm');
     wrap.appendChild(el('h3', null, 'After you have paid'));
     wrap.appendChild(el('p', null, 'Send us a quick confirmation so we can match your payment.'));
-    var msg = 'Hello STAS, I have paid ' + money(d.amount) + ' for ' + d.ref + '. Name: ' + d.name + '.';
+    var msg = 'Hello STAS, I have paid ' + money(d.amount, d.cur) + ' for ' + d.ref + '. Name: ' + d.name + '.';
     var actions = el('div', 'hero-cta');
     if (site.whatsapp && /^\d{9,15}$/.test(site.whatsapp)) {
       var wa = el('a', 'btn btn-gold btn-sm', 'Confirm on WhatsApp');
@@ -104,6 +130,14 @@
     actions.appendChild(mail);
     wrap.appendChild(actions);
     return wrap;
+  }
+
+  function paypalUrl(d) {
+    if (/^[A-Za-z0-9._-]{3,}$/.test(ppMe)) {
+      var amt = Number(d.amount).toFixed(2).replace(/\.00$/, '');
+      return 'https://www.paypal.me/' + encodeURIComponent(ppMe) + '/' + amt + ppCur;
+    }
+    return ppLink;
   }
 
   function show(d, method) {
@@ -136,10 +170,13 @@
       if (b.branch) result.appendChild(copyRow('Branch', b.branch));
       result.appendChild(copyRow('Payment reference', d.ref));
     } else if (method === 'paypal') {
-      result.appendChild(el('p', null, 'Use the link below and include ' + d.ref + ' in the note.'));
-      var pp = el('a', 'btn btn-gold', 'Continue to PayPal');
-      pp.href = cfg.paypalUrl; pp.target = '_blank'; pp.rel = 'noopener noreferrer';
-      result.appendChild(pp);
+      var viaMe = /^[A-Za-z0-9._-]{3,}$/.test(ppMe);
+      result.appendChild(el('p', null, viaMe
+        ? 'PayPal payments are made in ' + ppCur + '. On the PayPal page, check the amount and add ' + d.ref + ' in the note to seller.'
+        : 'PayPal payments are made in ' + ppCur + '. On the PayPal page, enter ' + money(d.amount, d.cur) + ' and add ' + d.ref + ' in the note.'));
+      var pb = el('a', 'btn btn-gold', 'Continue to PayPal');
+      pb.href = paypalUrl(d); pb.target = '_blank'; pb.rel = 'noopener noreferrer';
+      result.appendChild(pb);
     }
 
     result.appendChild(confirmLinks(d));
@@ -161,11 +198,14 @@
 
   form.addEventListener('submit', function (ev) {
     ev.preventDefault();
+    var picked = form.querySelector('input[name="method"]:checked');
+    var m = methodById(picked ? picked.value : methods[0].id);
     var d = {
       name: form.elements.name.value.trim(),
       email: form.elements.email.value.trim(),
       ref: form.elements.ref.value.trim(),
-      amount: parseFloat(form.elements.amount.value)
+      amount: parseFloat(form.elements.amount.value),
+      cur: m.cur
     };
     var ok = true;
     function flag(id, bad) {
@@ -178,7 +218,6 @@
     flag('amount', !(d.amount > 0));
     if (!ok) { note.textContent = 'Please complete all fields with valid details.'; return; }
     note.textContent = '';
-    var picked = form.querySelector('input[name="method"]:checked');
-    show(d, picked ? picked.value : methods[0].id);
+    show(d, m.id);
   });
 })();

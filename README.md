@@ -56,3 +56,17 @@ All settings live in `js/payments-config.js`. Any option left empty is hidden; w
 Security: this file is public. Never put API secret keys in it. Payments are reconciled by the invoice number the
 customer enters as the reference, then confirmed by WhatsApp or email. Automatic confirmation (webhooks) needs a
 small server; ask if you want that added later.
+
+## PayPal
+PayPal does not support Kenyan shillings, so PayPal payments are in USD. On pay.html the amount field switches to USD
+when a client picks PayPal. In `js/payments-config.js`, under `paypal`:
+- `me`: your PayPal.Me name (for paypal.me/stasinfinity enter "stasinfinity"). The amount is filled in automatically.
+- or `link`: any PayPal payment link or button link (https://...).
+
+## SEO
+- Every page has its own title, description, canonical URL, Open Graph/Twitter tags and structured data (JSON-LD).
+- `assets/og-image.jpg` is the picture shown when the site is shared on WhatsApp, Facebook, LinkedIn and X.
+- `sitemap.xml` lists the pages; `robots.txt` points search engines to it. `pay.html` is set to "noindex" on purpose.
+- After going live: verify stas.co.ke in Google Search Console (a "Domain" property with a DNS TXT record is easiest),
+  then submit https://stas.co.ke/sitemap.xml. Do the same in Bing Webmaster Tools.
+- When you add a new page, add it to `sitemap.xml` and give it its own title and description.

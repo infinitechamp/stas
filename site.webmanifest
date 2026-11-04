@@ -1,0 +1,13 @@
+{
+  "name": "STAS Intelligent Systems",
+  "short_name": "STAS",
+  "description": "Technology beyond limits: websites, systems, cloud, IT support, Meta ads, tutoring and research assistance in Kenya.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b1f5b",
+  "theme_color": "#0b1f5b",
+  "icons": [
+    { "src": "assets/icon.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

@@ -329,3 +329,12 @@ p { margin: 0 0 1em; }
 .form button:disabled { opacity: .6; cursor: wait; }
 
 @media (max-width: 960px) { .svc-grid { grid-template-columns: 1fr; } }
+
+/* ---------- Hero heading (tagline) ---------- */
+.hero h1 { font-size: clamp(2rem, 4.2vw, 3.2rem); line-height: 1.15; }
+.h1-top, .h1-sub { display: block; }
+.h1-bar { display: block; width: 72px; height: 3px; border-radius: 2px; margin: 14px 0; background: linear-gradient(90deg, var(--gold-light), var(--gold-dark)); }
+.hint { display: block; margin-top: 6px; font-size: .82rem; color: var(--muted); }
+.form-note a { color: inherit; text-decoration: underline; }
+.svc-kenya { margin-top: 20px; color: var(--muted); }
+.svc-kenya a { color: var(--navy); font-weight: 600; }
