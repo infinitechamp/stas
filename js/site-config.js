@@ -1,18 +1,14 @@
 /*
- * STAS site settings. Edit this one file to change contact details everywhere.
- * This file is public (served by GitHub Pages): only put information you are happy to show on the website.
+ * STAS site settings. Contact Form
  */
 window.STAS_SITE = {
   email: "stasinfinitysystems@gmail.com",
-  phone: "+254 717 817 719",          // shown on the website
-  whatsapp: "254717817719",           // digits only, with country code, no + or spaces
+  phone: "+254 717 817 719",          
+  whatsapp: "254717817719",           
   location: "Kenya",
   whatsappGreeting: "Hello STAS, I'd like to know more about your services.",
 
-  // Contact form delivery (free service: web3forms.com).
-  // 1) Go to web3forms.com, enter the email address that should receive enquiries, and verify it.
-  // 2) Paste the access key they email you between the quotes below. The key is meant to be public.
-  // Until a key is added, the form falls back to opening the visitor's email app.
-  formAccessKey: "",
+  // Contact form Email Delivery
+  formAccessKey: "b1b99757-5f8d-4e7b-bae8-8a0ac5ac5b39",
   formSubject: "New enquiry from stas.co.ke"
 };
