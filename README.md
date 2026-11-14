@@ -44,8 +44,7 @@ GitHub Pages is static, so the payments page uses hosted checkout links and manu
 All settings live in `js/payments-config.js`. Any option left empty is hidden; with everything empty, visitors see a
 "payments are being set up" notice and your contact email.
 
-1. **M-Pesa + card checkout (recommended):** create a payment link in your provider's dashboard (Paystack, IntaSend,
-   Pesapal or Flutterwave all work in Kenya) and paste the https:// link into `paystack.kes` or `paystack.usd`.
+1. **M-Pesa + card checkout (recommended):** create a payment link in your provider's dashboard (any Kenyan provider works) and paste the https:// links into `card.kes` and `card.usd`.
    Providers verify your business before going live (typically KRA PIN plus business registration and ID); check
    their current requirements when you sign up.
 2. **M-Pesa Paybill/Till:** set `mpesa.type` to `"paybill"` or `"till"` and fill `mpesa.number`.
@@ -56,8 +55,8 @@ Security: this file is public. Never put API secret keys in it. Payments are rec
 customer enters as the reference, then confirmed by WhatsApp or email. Automatic confirmation (webhooks) needs a
 small server; ask if you want that added later.
 
-## Paystack
-In the Paystack dashboard create a Payment Page or Payment Link (card + M-Pesa, KES), then paste its https:// URL into `paystack.kes` (KES page) or `paystack.usd` (USD page) in `js/payments-config.js`. Paystack's secret key must never go in this repo.
+## Card payments
+The two card buttons on pay.html (KES and USD) open the checkout links set in `cardLinks` in `js/payments-config.js`. Replace the links there to change them. Never put secret keys in this repo.
 
 ## SEO
 - Every page has its own title, description, canonical URL, Open Graph/Twitter tags and structured data (JSON-LD).

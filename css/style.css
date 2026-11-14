@@ -342,3 +342,9 @@ p { margin: 0 0 1em; }
 .steps-6 { grid-template-columns: repeat(3, 1fr); }
 @media (max-width: 960px) { .steps-6 { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 560px) { .steps-6 { grid-template-columns: 1fr; } }
+
+/* Pay page blocks */
+.pay-block { padding: 18px 0; border-top: 1px solid var(--line); }
+.pay-block:first-of-type { border-top: 0; }
+.pay-block h3 { margin: 0 0 8px; font-size: 1.05rem; }
+.pay-block .hero-cta { margin-top: 12px; }

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Pay Online | STAS Intelligent Systems</title>
-  <meta name="description" content="Pay STAS Intelligent Systems invoices and quotations with M-Pesa, card (Paystack) or bank transfer.">
+  <meta name="description" content="Pay STAS Intelligent Systems invoices and quotations with M-Pesa, card or bank transfer.">
   <meta name="theme-color" content="#0b1f5b">
   <link rel="canonical" href="https://stas.co.ke/pay.html">
   <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
@@ -20,7 +20,7 @@
   <meta property="og:site_name" content="STAS Intelligent Systems">
   <meta property="og:locale" content="en_KE">
   <meta property="og:title" content="Pay Online | STAS Intelligent Systems">
-  <meta property="og:description" content="Pay STAS Intelligent Systems invoices and quotations with M-Pesa, card (Paystack) or bank transfer.">
+  <meta property="og:description" content="Pay STAS Intelligent Systems invoices and quotations with M-Pesa, card or bank transfer.">
   <meta property="og:url" content="https://stas.co.ke/pay.html">
   <meta property="og:image" content="https://stas.co.ke/assets/og-image.jpg">
   <meta property="og:image:width" content="1200">
@@ -28,7 +28,7 @@
   <meta property="og:image:alt" content="STAS Intelligent Systems: technology beyond limits">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Pay Online | STAS Intelligent Systems">
-  <meta name="twitter:description" content="Pay STAS Intelligent Systems invoices and quotations with M-Pesa, card (Paystack) or bank transfer.">
+  <meta name="twitter:description" content="Pay STAS Intelligent Systems invoices and quotations with M-Pesa, card or bank transfer.">
   <meta name="twitter:image" content="https://stas.co.ke/assets/og-image.jpg">
   <!-- seo:end -->
 </head>
@@ -64,7 +64,6 @@
       <div class="wrap">
         <p class="eyebrow">Secure payments</p>
         <h1>Pay <span class="gold-text">STAS</span> online</h1>
-        <p class="lead">Settle an invoice or quotation with M-Pesa, card (Paystack) or bank transfer. Have your invoice or quotation number ready.</p>
       </div>
     </section>
 
@@ -80,46 +79,23 @@
             <a href="mailto:stasinfinitysystems@gmail.com">stasinfinitysystems@gmail.com</a> and we will send you payment details.
           </div>
 
-          <form id="pay-form" class="form" novalidate hidden>
-            <h2 class="form-title">Payment details</h2>
-
-            <div class="field">
-              <label for="p-name">Your name or company</label>
-              <input id="p-name" name="name" type="text" autocomplete="name" required>
+          <div id="card-pay" class="form card-pay" hidden>
+            <h2 class="form-title">Pay by card</h2>
+            <p>Choose your currency to open our secure checkout.</p>
+            <div class="hero-cta">
+              <a id="btn-kes" class="btn btn-gold" href="#" target="_blank" rel="noopener noreferrer" hidden>Pay in KES</a>
+              <a id="btn-usd" class="btn btn-gold" href="#" target="_blank" rel="noopener noreferrer" hidden>Pay in USD</a>
             </div>
-            <div class="field">
-              <label for="p-email">Email (for your receipt)</label>
-              <input id="p-email" name="email" type="email" autocomplete="email" required>
-            </div>
-            <div class="field-row">
-              <div class="field">
-                <label for="p-ref">Invoice / quotation no.</label>
-                <input id="p-ref" name="ref" type="text" placeholder="e.g. INV-0012" required>
-              </div>
-              <div class="field">
-                <label for="p-amount">Amount (<span class="cur">KES</span>)</label>
-                <input id="p-amount" name="amount" type="number" inputmode="decimal" min="1" step="any" required>
-                <small class="hint" id="amount-hint" hidden></small>
-              </div>
-            </div>
+          </div>
 
-            <fieldset class="methods" id="methods">
-              <legend>How would you like to pay?</legend>
-              <!-- filled by js/pay.js from js/payments-config.js -->
-            </fieldset>
-
-            <button type="submit" class="btn btn-gold">Continue</button>
-            <p class="form-note" id="pay-note" role="status"></p>
-          </form>
-
-          <div id="pay-result" class="result" hidden aria-live="polite"></div>
+          <div id="pay-panel" class="form" hidden></div>
         </div>
 
         <aside class="pay-aside">
           <h3>Safe and simple</h3>
           <ul class="checks">
-            <li>Payments go through M-Pesa, card (Paystack) or your bank. We never see or store your card or PIN details.</li>
-            <li>Always use the invoice number as your payment reference so we can match it.</li>
+            <li>Payments go through M-Pesa, secure card checkout or your bank. We never see or store your card or PIN details.</li>
+            <li>Add your invoice number as the reference when you pay so we can match it.</li>
             <li>You will get a confirmation once we receive your payment.</li>
           </ul>
           <h3>Need help?</h3>
