@@ -35,7 +35,7 @@ The form posts to Web3Forms (free). To switch it on:
 The key is meant to be public. Until it is set, the form falls back to opening the visitor's email app.
 
 ## Service pages
-Each service has its own page in `services/` (including Meta Ads). Edit the text directly in those HTML files.
+Each service has its own page in `services/` (including Meta Business Suite & Ads). Edit the text directly in those HTML files.
 The home page cards (`index.html`, section "What we do") link to them. To add a service, copy one of the files in
 `services/`, edit it, and add a card and a `sitemap.xml` entry.
 
@@ -45,23 +45,19 @@ All settings live in `js/payments-config.js`. Any option left empty is hidden; w
 "payments are being set up" notice and your contact email.
 
 1. **M-Pesa + card checkout (recommended):** create a payment link in your provider's dashboard (Paystack, IntaSend,
-   Pesapal or Flutterwave all work in Kenya) and paste the https:// link into `checkoutUrl`.
+   Pesapal or Flutterwave all work in Kenya) and paste the https:// link into `paystack.kes` or `paystack.usd`.
    Providers verify your business before going live (typically KRA PIN plus business registration and ID); check
    their current requirements when you sign up.
 2. **M-Pesa Paybill/Till:** set `mpesa.type` to `"paybill"` or `"till"` and fill `mpesa.number`.
 3. **Bank transfer:** fill the `bank` block.
-4. **International:** optionally add a PayPal link in `paypalUrl`.
 5. The "Confirm on WhatsApp" button uses the WhatsApp number in `js/site-config.js`.
 
 Security: this file is public. Never put API secret keys in it. Payments are reconciled by the invoice number the
 customer enters as the reference, then confirmed by WhatsApp or email. Automatic confirmation (webhooks) needs a
 small server; ask if you want that added later.
 
-## PayPal
-PayPal does not support Kenyan shillings, so PayPal payments are in USD. On pay.html the amount field switches to USD
-when a client picks PayPal. In `js/payments-config.js`, under `paypal`:
-- `me`: your PayPal.Me name (for paypal.me/stasinfinity enter "stasinfinity"). The amount is filled in automatically.
-- or `link`: any PayPal payment link or button link (https://...).
+## Paystack
+In the Paystack dashboard create a Payment Page or Payment Link (card + M-Pesa, KES), then paste its https:// URL into `paystack.kes` (KES page) or `paystack.usd` (USD page) in `js/payments-config.js`. Paystack's secret key must never go in this repo.
 
 ## SEO
 - Every page has its own title, description, canonical URL, Open Graph/Twitter tags and structured data (JSON-LD).

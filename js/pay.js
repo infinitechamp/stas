@@ -12,10 +12,6 @@
   if (!form) return;
 
   var baseCur = cfg.currency || 'KES';
-  var pp = cfg.paypal || {};
-  var ppCur = pp.currency || 'USD';
-  var ppMe = typeof pp.me === 'string' ? pp.me.trim().replace(/^.*paypal\.(?:me|com\/paypalme)\//i, '').replace(/\/.*$/, '') : '';
-  var ppLink = pp.link || cfg.paypalUrl || '';
 
   function isHttps(u) { return typeof u === 'string' && /^https:\/\//i.test(u); }
   function el(tag, cls, text) {
@@ -30,8 +26,13 @@
 
   // Build the list of methods that are actually configured
   var methods = [];
-  if (isHttps(cfg.checkoutUrl)) {
-    methods.push({ id: 'checkout', cur: baseCur, title: cfg.checkoutLabel || 'Pay with M-Pesa or card', desc: 'Secure online checkout. Recommended.' });
+  var ps = cfg.paystack || {};
+  var psLinks = { 'paystack-kes': ps.kes, 'paystack-usd': ps.usd };
+  if (isHttps(ps.kes)) {
+    methods.push({ id: 'paystack-kes', cur: 'KES', title: 'Pay with card or M-Pesa (KES)', desc: 'Secure checkout by Paystack, in Kenyan shillings. Recommended.' });
+  }
+  if (isHttps(ps.usd)) {
+    methods.push({ id: 'paystack-usd', cur: 'USD', title: 'Pay with card (USD)', desc: 'Secure checkout by Paystack, charged in US dollars. For international clients.' });
   }
   if (cfg.mpesa && cfg.mpesa.number && (cfg.mpesa.type === 'paybill' || cfg.mpesa.type === 'till')) {
     methods.push({ id: 'mpesa', cur: baseCur, title: 'M-Pesa ' + (cfg.mpesa.type === 'paybill' ? 'Paybill' : 'Till'), desc: 'Pay from your phone menu.' });
@@ -39,10 +40,6 @@
   if (cfg.bank && cfg.bank.accountNumber) {
     methods.push({ id: 'bank', cur: baseCur, title: 'Bank transfer', desc: 'Pay from your bank or mobile banking.' });
   }
-  if (/^[A-Za-z0-9._-]{3,}$/.test(ppMe) || isHttps(ppLink)) {
-    methods.push({ id: 'paypal', cur: ppCur, title: 'PayPal', desc: 'For international payments, charged in ' + ppCur + '.' });
-  }
-
   if (!methods.length) {
     setup.hidden = false;
     return;
@@ -66,7 +63,7 @@
     methodsBox.appendChild(label);
   });
 
-  // Keep the amount label in the currency of the chosen method (PayPal does not support KES)
+  // Keep the amount label in the currency of the chosen method (some methods may use another currency)
   function syncCurrency() {
     var picked = form.querySelector('input[name="method"]:checked');
     var m = methodById(picked ? picked.value : methods[0].id);
@@ -132,23 +129,15 @@
     return wrap;
   }
 
-  function paypalUrl(d) {
-    if (/^[A-Za-z0-9._-]{3,}$/.test(ppMe)) {
-      var amt = Number(d.amount).toFixed(2).replace(/\.00$/, '');
-      return 'https://www.paypal.me/' + encodeURIComponent(ppMe) + '/' + amt + ppCur;
-    }
-    return ppLink;
-  }
-
   function show(d, method) {
     result.textContent = '';
     result.appendChild(el('h2', 'form-title', 'Complete your payment'));
     result.appendChild(summary(d));
 
-    if (method === 'checkout') {
-      result.appendChild(el('p', null, 'Click below to open our secure checkout. Please enter ' + d.ref + ' as the reference if asked.'));
-      var go = el('a', 'btn btn-gold', 'Continue to secure checkout');
-      go.href = cfg.checkoutUrl; go.target = '_blank'; go.rel = 'noopener noreferrer';
+    if (psLinks[method]) {
+      result.appendChild(el('p', null, 'Click below to open our secure Paystack checkout. Please enter ' + money(d.amount, d.cur) + ' and use ' + d.ref + ' as the reference if asked.'));
+      var go = el('a', 'btn btn-gold', 'Continue to Paystack');
+      go.href = psLinks[method]; go.target = '_blank'; go.rel = 'noopener noreferrer';
       result.appendChild(go);
     } else if (method === 'mpesa') {
       var t = cfg.mpesa.type === 'paybill' ? 'Paybill' : 'Till';
@@ -169,14 +158,6 @@
       result.appendChild(copyRow('Account number', b.accountNumber));
       if (b.branch) result.appendChild(copyRow('Branch', b.branch));
       result.appendChild(copyRow('Payment reference', d.ref));
-    } else if (method === 'paypal') {
-      var viaMe = /^[A-Za-z0-9._-]{3,}$/.test(ppMe);
-      result.appendChild(el('p', null, viaMe
-        ? 'PayPal payments are made in ' + ppCur + '. On the PayPal page, check the amount and add ' + d.ref + ' in the note to seller.'
-        : 'PayPal payments are made in ' + ppCur + '. On the PayPal page, enter ' + money(d.amount, d.cur) + ' and add ' + d.ref + ' in the note.'));
-      var pb = el('a', 'btn btn-gold', 'Continue to PayPal');
-      pb.href = paypalUrl(d); pb.target = '_blank'; pb.rel = 'noopener noreferrer';
-      result.appendChild(pb);
     }
 
     result.appendChild(confirmLinks(d));

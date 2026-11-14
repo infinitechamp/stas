@@ -13,11 +13,12 @@ window.STAS_PAYMENTS = {
 
   // Phone, WhatsApp and email for "I have paid" confirmations now come from js/site-config.js
 
-  // 1) Hosted checkout / payment link from your provider (M-Pesa + card).
-  //    Create a payment link in your Paystack, IntaSend, Pesapal or Flutterwave dashboard
-  //    and paste its https:// URL here.
-  checkoutUrl: "",
-  checkoutLabel: "Pay with M-Pesa or card",
+  // 1) Paystack checkout pages (one per currency). Paste the https:// page links from your Paystack dashboard.
+  //    Never put your Paystack secret key (sk_...) in this file.
+  paystack: {
+    kes: "https://paystack.shop/pay/kossas2v4p",   // Kenyan shillings (card + M-Pesa)
+    usd: "https://paystack.shop/pay/cwyky3477x"    // US dollars (international cards)
+  },
 
   // 2) M-Pesa Paybill or Till (manual payment, works with no provider)
   mpesa: {
@@ -32,17 +33,5 @@ window.STAS_PAYMENTS = {
     accountName: "",
     accountNumber: "",
     branch: ""
-  },
-
-  // 4) PayPal (international clients). PayPal does not support Kenyan shillings, so these payments are in USD.
-  //    email: your PayPal account email. The client sees it with copy buttons and sends the money from PayPal.
-  //    me   (optional, recommended): your PayPal.Me name. For paypal.me/stasinfinity put "stasinfinity".
-  //                            Adds a one-click button with the amount filled in automatically.
-  //    link (optional): any PayPal payment link or button link (https://...), if PayPal.Me is not available for your account.
-  paypal: {
-    email: "stastechn@gmail.com",
-    me: "",
-    link: "https://www.paypal.com/ncp/payment/F2T42MUHCCBWC",
-    currency: "USD"
   }
 };
